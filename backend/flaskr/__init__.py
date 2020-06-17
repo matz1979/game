@@ -16,6 +16,7 @@ def paginate(request, selection):
   Args:
     param request : read the request
     param selection : db query
+    
   Returns:
     current_questions : List from the db
 
@@ -35,6 +36,7 @@ def create_app(test_config=None):
 
   Args:
     param test_config : defaulf None
+
   Returns:
     param app : run the flask server
   '''
