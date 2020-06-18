@@ -103,7 +103,7 @@ def create_app(test_config=None):
       'current_category': None
     })
  
-  @app.route('/questions/<int:question_id')
+  @app.route('/questions/<int:question_id>')
   def delete_question(question_id):
     '''
     Delete one or more questions from the question table by ID
