@@ -85,6 +85,7 @@ def create_app(test_config=None):
     Returns:
       param success : true if the request was successful otherwise return a 404 error
       param questions : list of all questions
+      param total_questions : length of the list questions
       param categories : categories
       param current_category : None
     '''
