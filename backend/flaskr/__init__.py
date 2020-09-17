@@ -193,7 +193,7 @@ def create_app(test_config=None):
     return jsonify({
         'success': True,
         'questions': currend_question,
-        'total_questions': len(current_question),
+        'total_questions': len(currend_question),
         'current_category': None
     })
   
@@ -224,7 +224,11 @@ def create_app(test_config=None):
         'total_questions': len(currend_question),
         'current_category': None
       })
-  
+
+  ########
+  # GAME #
+  ########
+
   @app.route('/quizzes', methods=['POST'])
   def get_quiz():
     '''
@@ -244,32 +248,34 @@ def create_app(test_config=None):
     previous_questions = body.get('previous_questions', None)
     quizCategory = body.get('quiz_category', None)
 
+
+    # return a list if a category is selected or load all categories
     if quizCategory['id'] == 0:
         selection = Question.query.order_by(Question.id).all()
     else:
         selection = Question.query.order_by(Question.id).filter(
             Question.category == quizCategory['id']).all()
 
+    # return a list of all questions in the database
     currend_questions = paginate(selection, request)
-      
-    unasked_questions = [i for i in currend_questions if i['id'] not in previous_questions]
     
-    next_question = None
-    if len(unasked_questions) > 0:
-       next_question = unasked_questions[0]
+    # return a list of unanswered questions
+    unanswered_questions = [i for i in currend_questions if i['id'] not in previous_questions]
+    
+    # return a random choice from all unanswered questions
+    next_question = []
+    if len(unanswered_questions) > 0:
+       next_question = random.choice(unanswered_questions)
 
     return jsonify({
         'success': True,
         'question': next_question
       })
 
-    if len(get_questions) == 0:
-        return jsonify(None)
-    else:
-        selection = list(map(Question.format, get_questions))
-        question = random.choice(selection)
-        return jsonify(question)
-  
+  #################
+  # Error Handles #
+  #################
+
   @app.errorhandler(400)
   def bad_request(error):
     '''
